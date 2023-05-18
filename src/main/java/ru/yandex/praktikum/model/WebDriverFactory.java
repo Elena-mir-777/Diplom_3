@@ -1,4 +1,4 @@
-package ru.yandex.praktikum.base;
+package ru.yandex.praktikum.model;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;

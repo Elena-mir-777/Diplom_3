@@ -3,9 +3,9 @@ package ru.yandex.praktikum;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
-import ru.yandex.praktikum.base.UserGenerator;
-import ru.yandex.praktikum.client.User;
 import ru.yandex.praktikum.client.UserClient;
+import ru.yandex.praktikum.model.User;
+import ru.yandex.praktikum.model.UserGenerator;
 import ru.yandex.praktikum.pageObject.BlockInput;
 
 public class UserBaseTest extends BaseTest {
@@ -26,7 +26,7 @@ public class UserBaseTest extends BaseTest {
     @Override
     public void tearDown() {
         if (userClient.accessToken != null) {
-            userClient.delete();
+            userClient.deleteUser();
         }
         super.tearDown();
     }
@@ -51,7 +51,7 @@ public class UserBaseTest extends BaseTest {
         mainPage.open();
         mainPage.clickButtonLoginInMainPage();
         blockInput.waitBlockInput();
-        ValidatableResponse response = userClient.create(user);
+        ValidatableResponse response = userClient.createUser(user);
         setToken(response);
     }
 

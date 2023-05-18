@@ -7,8 +7,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import ru.yandex.praktikum.client.UserCredentials;
-import ru.yandex.praktikum.pageObject.*;
+import ru.yandex.praktikum.model.User;
+import ru.yandex.praktikum.model.UserCredentials;
+import ru.yandex.praktikum.pageObject.BlockRegistration;
 
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.*;
@@ -36,13 +37,13 @@ public class UserCreateTest extends UserBaseTest {
    @DisplayName("Check Success Registration New User")
    public void checkSuccessRegistrationNewUser(){
       preparingRegistration();
-      ValidatableResponse response = userClient.create(user)
-              .assertThat()
+      ValidatableResponse response = userClient.createUser(user);
+      setToken(response);
+      response.assertThat()
               .statusCode(SC_OK)
               .assertThat().body("success", is(true))
               .assertThat().body("user", notNullValue())
               .assertThat().body("accessToken", notNullValue());
-      setToken(response);
       blockRegistration.clickButtonComeIn();
       blockInput.waitBlockInput();//User зарегистрирован,если блок вход загружается
    }
@@ -51,13 +52,16 @@ public class UserCreateTest extends UserBaseTest {
    public void waitErrorForIncorrectPassword(){
       preparingRegistration();
 
+      String invalidPassword = RandomStringUtils.randomAlphabetic(5);
       blockRegistration.fillName(user.getName());
       blockRegistration.fillEmail(user.getEmail());
-      blockRegistration.fillPassword(RandomStringUtils.randomAlphabetic(5));
+      blockRegistration.fillPassword(invalidPassword);
       blockRegistration.clickButtonLoginUser();
       blockRegistration.waitErrorMessagePassword(); // ожидаем ошибку
-      ValidatableResponse response = userClient.login(UserCredentials.from(user)); // пробуем залогиниться
-      String accessToken = response.extract().path("accessToken");
-      Assert.assertNull(accessToken);//ожидаем null токен
+
+      ValidatableResponse resp = userClient.logInUser(new UserCredentials(user.getEmail(), invalidPassword)); // пробуем залогиниться
+      setToken(resp);
+      Assert.assertNull(userClient.accessToken);//ожидаем null токен
+      // если токен не пустой, то пользователь будет удален
     }
 }

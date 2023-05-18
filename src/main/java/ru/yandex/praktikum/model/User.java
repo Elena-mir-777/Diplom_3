@@ -1,4 +1,4 @@
-package ru.yandex.praktikum.client;
+package ru.yandex.praktikum.model;
 
 public class User {
     private final String name;

@@ -1,4 +1,4 @@
-package ru.yandex.praktikum;
+package ru.yandex.praktikum.model;
 
 import org.openqa.selenium.WebDriver;
 

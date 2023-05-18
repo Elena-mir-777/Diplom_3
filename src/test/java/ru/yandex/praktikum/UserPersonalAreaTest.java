@@ -3,9 +3,9 @@ package ru.yandex.praktikum;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Before;
 import org.junit.Test;
-import ru.yandex.praktikum.pageObject.*;
+import ru.yandex.praktikum.pageObject.BlockPersonalArea;
 
-public class UserPersonalAreaTest extends UserBaseTest {
+public class  UserPersonalAreaTest extends UserBaseTest {
     private BlockPersonalArea blockPersonalArea;
     @Before
     @Override
